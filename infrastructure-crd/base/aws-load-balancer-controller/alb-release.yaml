@@ -10,9 +10,9 @@ spec:
       chart: aws-load-balancer-controller
       sourceRef:
         kind: HelmRepository
-        name: eks
+        name: eks-charts
         namespace: flux-system
-      version: "1.4.4"
+      version: "1.4.6"
   interval: 1h0m0s
   install:
     remediation:
