@@ -8,7 +8,7 @@ configMapGenerator:
 
   - name: aws-load-balancer-controller-values
     files:
-      - values.yaml=./base/aws-load-balancer-controller/values.yaml
+      - values.yaml=./aws-load-balancer-controller/values.yaml
     namespace: aws-load-balancer-controller
 
 configurations:
