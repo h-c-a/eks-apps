@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   - ../sources
   - ../base
+  - kube-prometheus-stack
 
 configMapGenerator:
 
