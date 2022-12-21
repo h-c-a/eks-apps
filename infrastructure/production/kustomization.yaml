@@ -4,9 +4,6 @@ resources:
   - ../sources
   - ../base
 
-  - base/ingress
-
-
 configMapGenerator:
 
   - name: ingress-nginx-values
