@@ -1,0 +1,42 @@
+apiVersion: networking.k8s.io/v1                                                                                                                                                                                                                
+kind: Ingress
+metadata:
+  annotations:
+    alb.ingress.kubernetes.io/group.name: ingress-nginx
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:eu-central-1:807070170018:certificate/afa9f537-2f48-4180-914b-d677f0adccc2
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80},{"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}' # https redirection
+    alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-TLS-1-2-2017-01 # https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies
+    alb.ingress.kubernetes.io/wafv2-acl-arn: arn:aws:wafv2:eu-central-1:807070170018:regional/webacl/APIGateway/469659a0-4b2f-48b8-ba03-6cef7d2f5f20
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+    alb.ingress.kubernetes.io/healthcheck-path: /healthz
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: '5'
+    alb.ingress.kubernetes.io/healthcheck-timeout-seconds: '3'
+    alb.ingress.kubernetes.io/healthy-threshold-count: '2' # minimum is 2
+    alb.ingress.kubernetes.io/load-balancer-attributes: deletion_protection.enabled=true,routing.http.drop_invalid_header_fields.enabled=true,routing.http2.enabled=true,idle_timeout.timeout_seconds=30,access_logs.s3.enabled=true,access_logs.s3.bucket=aws-alb-prod-frankfurt-ingress-nginx-controller,access_logs.s3.prefix=ingress-nginx
+    alb.ingress.kubernetes.io/tags: kubernetes.io/namespace-name=ingress-nginx,env=prod,region=eu-central-1,provisioner=kubectl,stack=non-prod,moodagent:org:unit=infrastructure,moodagent:org:team=infrastructure,moodagent:org:contact=infrastructure@moodagent.com,moodagent:org:owner=infrastructure@moodagent.com
+    kubernetes.io/ingress.class: alb
+  name: ingress-nginx-alb
+  namespace: ingress-nginx
+spec:
+  rules:
+    - host: api.castl.ink
+      http:
+        paths:
+         - path: /*
+           pathType: ImplementationSpecific
+           backend:
+             service:
+               name: ssl-redirect
+               port: 
+                 number: use-annotation
+         - path: /*
+           pathType: ImplementationSpecific
+           backend:
+             service:
+               name: ingress-nginx-controller
+               port: 
+                 number: 80
