@@ -12,7 +12,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: kubecost
-        namespace: kubecost
+        namespace: flux-system
   interval: 1m0s
   install:
     remediation:
