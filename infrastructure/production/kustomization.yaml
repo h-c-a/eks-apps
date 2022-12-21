@@ -8,7 +8,7 @@ configMapGenerator:
 
   - name: ingress-nginx-values
     files:
-      - values.yaml=./base/ingress/values.yaml
+      - values.yaml=./ingress/values.yaml
     namespace: ingress-nginx
 
 configurations:
