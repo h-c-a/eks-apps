@@ -1,0 +1,12 @@
+apiVersion: image.toolkit.fluxcd.io/v1beta1
+kind: ImagePolicy
+metadata:
+  name: moderation-api-production-frankfurt
+spec:
+  filterTags:
+    pattern: .*-production\.build\..*
+  imageRepositoryRef:
+    name: moderation-api
+  policy:
+    semver:
+      range: '>=0.0.0-0'
