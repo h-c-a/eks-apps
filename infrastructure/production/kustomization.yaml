@@ -4,6 +4,7 @@ resources:
   - ../sources
   - ../base
   - ingress
+  - moderation-api
 
 configMapGenerator:
 
