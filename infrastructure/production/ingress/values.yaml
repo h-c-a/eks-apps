@@ -9,7 +9,6 @@
 
 controller:
   name: controller
-  namespace: ingress-nginx
   image:
     ## Keep false as default for now!
     chroot: false
@@ -34,18 +33,17 @@ controller:
   # Will add custom configuration options to Nginx https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/
   config:
     use-forwarded-headers: true
-    proxy-set-headers: "ingress-nginx/nginx-custom-headers"
     use-geoip: false
-    use-geoip2: true
-    use-gzip: true
+    use-geoip2: false
+    use-gzip: false
     gzip-level: 6
-    log-format-upstream: '{"time": "$time_iso8601", "remote_addr": "$remote_addr", "x_forwarded_for": "$proxy_add_x_forwarded_for", "request_id": "$req_id", "remote_user": "$remote_user", "request": "$request", "bytes_sent": $bytes_sent, "body_bytes_sent": $body_bytes_sent, "request_time": $request_time, "status": $status, "host": "$host", "request_proto": "$server_protocol", "path": "$uri", "request_query": "$args", "request_length": $request_length, "method": "$request_method", "proxy_upstream_name": "$proxy_upstream_name", "upstream_addr": "$upstream_addr", "upstream_response_length": "$upstream_response_length", "upstream_response_time": "$upstream_response_time", "upstream_status": "$upstream_status", "http_referrer": "$http_referer", "http_user_agent": "$http_user_agent", "geoip2_city_country_name": "$geoip2_city_country_name", "geoip2_city_country_code": "$geoip2_city_country_code" }'
+    log-format-upstream: '{"time": "$time_iso8601", "remote_addr": "$remote_addr", "x_forwarded_for": "$proxy_add_x_forwarded_for", "request_id": "$req_id", "remote_user": "$remote_user", "request": "$request", "bytes_sent": $bytes_sent, "body_bytes_sent": $body_bytes_sent, "request_time": $request_time, "status": $status, "host": "$host", "request_proto": "$server_protocol", "path": "$uri", "request_query": "$args", "request_length": $request_length, "method": "$request_method", "proxy_upstream_name": "$proxy_upstream_name", "upstream_addr": "$upstream_addr", "upstream_response_length": "$upstream_response_length", "upstream_response_time": "$upstream_response_time", "upstream_status": "$upstream_status", "http_referrer": "$http_referer", "http_user_agent": "$http_user_agent" }'
     # Original log-format-upstream:  '$remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent" $request_length $request_time [$proxy_upstream_name] [$proxy_alternative_upstream_name] $upstream_addr $upstream_response_length $upstream_response_time $upstream_status $req_id';
 
     # https://kubernetes.github.io/ingress-nginx/user-guide/third-party-addons/opentracing/#usage
     # enable-opentracing: "true"
     #jaeger-collector-host: jaeger-agent.jaeger.traefik.mesh
-    #jaeger-service-name: ingress-nginx
+    #jaeger-service-name: ingress-nginx    
 
   ## Annotations to be added to the controller config configuration configmap
   ##
@@ -69,6 +67,14 @@ controller:
   # Ingress status was blank because there is no Service exposing the NGINX Ingress controller in a configuration using the host network, the default --publish-service flag used in standard cloud setups does not apply
   reportNodeInternalIp: false
 
+  # -- Process Ingress objects without ingressClass annotation/ingressClassName field
+  # Overrides value for --watch-ingress-without-class flag of the controller binary
+  # Defaults to false
+  watchIngressWithoutClass: false
+
+  # -- Process IngressClass per name (additionally as per spec.controller).
+  ingressClassByName: false
+  
   # Required for use with CNI based kubernetes installations (such as ones set up by kubeadm),
   # since CNI and hostport don't mix yet. Can be deprecated once https://github.com/kubernetes/kubernetes/issues/23920
   # is merged
@@ -87,10 +93,26 @@ controller:
   ##
   electionID: ingress-controller-leader
 
-  ## Name of the ingress class to route through this controller
-  ##
-  ingressClass: nginx
+   ## This section refers to the creation of the IngressClass resource
+  ## IngressClass resources are supported since k8s >= 1.18 and required since k8s >= 1.19
+  ingressClassResource:
+    # -- Name of the ingressClass
+    name: nginx
+    # -- Is this ingressClass enabled or not
+    enabled: true
+    # -- Is this the default ingressClass for the cluster
+    default: false
+    # -- Controller-value of the controller that is processing this ingressClass
+    controllerValue: "k8s.io/ingress-nginx"
 
+    # -- Parameters is a link to a custom resource containing additional
+    # configuration for the controller. This is optional if the controller
+    # does not require extra parameters.
+    parameters: {}
+
+  # -- For backwards compatibility with ingress.class annotation, use ingressClass.
+  # Algorithm is as follows, first ingressClassName is considered, if not present, controller looks for ingress.class annotation
+  ingressClass: nginx
   # labels to add to the pod container metadata
   podLabels: {}
   #  key: value
@@ -141,10 +163,6 @@ controller:
     ## Annotations to be added to the udp config configmap
     annotations: {}
 
-  # Maxmind license key to download GeoLite2 Databases
-  # https://blog.maxmind.com/2019/12/18/significant-changes-to-accessing-and-using-geolite2-databases
-  # maxmindLicenseKey: "$(MAXMIND_LICENCE_KEY)" # https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/#using-environment-variables-inside-of-your-config
-
   ## Additional command line arguments to pass to nginx-ingress-controller
   ## E.g. to specify the default SSL certificate you can use
   ## extraArgs:
@@ -152,26 +170,14 @@ controller:
   # extraArgs: {}
   extraArgs:
     metrics-per-host: false
-    # maxmind-edition-ids: "GeoLite2-Country,GeoLite2-City,GeoLite2-ASN"
 
   ## Additional environment variables to set
   # extraEnvs: []
   extraEnvs:
-    # - name: MAXMIND_LICENCE_KEY
-    #   valueFrom:
-    #     secretKeyRef:
-    #       key: MAXMIND_LICENCE_KEY
-    #       name: nginx-maxmind-licence-key
     - name: HOST_IP # required for tracing
       valueFrom:
         fieldRef:
           fieldPath: status.hostIP
-  # extraEnvs:
-  #   - name: FOO
-  #     valueFrom:
-  #       secretKeyRef:
-  #         key: FOO
-  #         name: secret-resource
 
   ## DaemonSet or Deployment
   ##
@@ -398,7 +404,6 @@ controller:
 
   service:
     enabled: true
-
     annotations: {}
 
     labels: {}
@@ -418,7 +423,7 @@ controller:
     ## Set external traffic policy to: "Local" to preserve source IP on
     ## providers supporting it
     ## Ref: https://kubernetes.io/docs/tutorials/services/source-ip/#source-ip-for-services-with-typeloadbalancer
-    externalTrafficPolicy: ""
+    externalTrafficPolicy:
 
     # Must be either "None" or "ClientIP" if set. Kubernetes will default to "None".
     # Ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
@@ -733,16 +738,6 @@ defaultBackend:
   # requests:
   #   cpu: 10m
   #   memory: 20Mi
-
-  extraVolumeMounts: []
-  ## Additional volumeMounts to the default backend container.
-  #  - name: copy-portal-skins
-  #   mountPath: /var/lib/lemonldap-ng/portal/skins
-
-  extraVolumes: []
-  ## Additional volumes to the default backend pod.
-  #  - name: copy-portal-skins
-  #    emptyDir: {}
 
   autoscaling:
     enabled: false
