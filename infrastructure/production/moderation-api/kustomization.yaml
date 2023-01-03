@@ -5,8 +5,8 @@ resources:
   - base
   - imagepolicy.yaml
 images:
-  - name: 807070170018.dkr.ecr.us-east-1.amazonaws.com/moderation-api # {"$imagepolicy": "api:moderation-api-production-frankfurt:name"}
-    newTag: 1.0.0-production.build.100 # {"$imagepolicy": "api:moderation-api-production-frankfurt:tag"}
+  - name: 807070170018.dkr.ecr.us-east-1.amazonaws.com/moderation-api
+    newTag: 1.0.1-production.build.101 
 replicas:
   - name: moderation-api
     count: 5
