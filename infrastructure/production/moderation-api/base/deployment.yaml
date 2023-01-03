@@ -7,6 +7,11 @@ spec:
   selector:
     matchLabels:
       app: moderation-api
+  template:
+    metadata:
+      labels:
+        app: moderation-api
+        log: tokafka
     spec:
       automountServiceAccountToken: false
       affinity:
@@ -24,7 +29,7 @@ spec:
       containers:
         - name: moderation-api
           image: 807070170018.dkr.ecr.eu-central-1.amazonaws.com/ab3moderator
-          imagePullPolicy: Always 
+          imagePullPolicy: Always
           env:
             - name: DD_AGENT_HOST
               valueFrom:
