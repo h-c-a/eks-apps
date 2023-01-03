@@ -1,4 +1,4 @@
-apiVersion: image.toolkit.fluxcd.io/v1alpha2
+apiVersion: image.toolkit.fluxcd.io/v1beta1
 kind: ImageRepository
 metadata:
   name: moderation-api
@@ -6,5 +6,3 @@ metadata:
 spec:
   image: 807070170018.dkr.ecr.eu-central-1.amazonaws.com/ab3moderator
   interval: 10s
-  secretRef:
-    name: ecr-credentials
