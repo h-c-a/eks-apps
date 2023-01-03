@@ -22,6 +22,7 @@ metadata:
   name: ingress-nginx-alb
   namespace: ingress-nginx
 spec:
+  ingressClassName: alb
   rules:
     - host: api.castl.ink
       http:
@@ -29,11 +30,14 @@ spec:
          - path: /*
            pathType: ImplementationSpecific
            backend:
-             serviceName: ssl-redirect
-             servicePort: use-annotation
+             service:
+               name: ssl-redirect
+               port: 
+                 number: use-annotation
          - path: /*
            pathType: ImplementationSpecific
            backend:
              service:
-               serviceName: ingress-nginx-controller
-               servicePort: 80
+               name: ingress-nginx-controller
+               port: 
+                 number: 80
