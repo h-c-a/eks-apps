@@ -17,8 +17,7 @@ metadata:
     alb.ingress.kubernetes.io/healthcheck-timeout-seconds: '3'
     alb.ingress.kubernetes.io/healthy-threshold-count: '2' # minimum is 2
     alb.ingress.kubernetes.io/load-balancer-attributes: deletion_protection.enabled=true,routing.http.drop_invalid_header_fields.enabled=true,routing.http2.enabled=true,idle_timeout.timeout_seconds=30,access_logs.s3.enabled=true,access_logs.s3.bucket=aws-alb-prod-frankfurt-ingress-nginx-controller,access_logs.s3.prefix=ingress-nginx
-    alb.ingress.kubernetes.io/tags: kubernetes.io/namespace-name=ingress-nginx,env=prod,region=eu-central-1,provisioner=kubectl,stack=non-prod,moodagent:org:unit=infrastructure,moodagent:org:team=infrastructure,moodagent:org:contact=infrastructure@moodagent.com,moodagent:org:owner=infrastructure@moodagent.com
-    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/tags: kubernetes.io/namespace-name=ingress-nginx,env=prod,region=eu-central-1,provisioner=kubectl
   name: ingress-nginx-alb
   namespace: ingress-nginx
 spec:
