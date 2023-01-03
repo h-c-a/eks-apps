@@ -29,14 +29,11 @@ spec:
          - path: /*
            pathType: ImplementationSpecific
            backend:
-             service:
-               name: ssl-redirect
-               port: 
-                 number: use-annotation
+             serviceName: ssl-redirect
+             servicePort: use-annotation
          - path: /*
            pathType: ImplementationSpecific
            backend:
              service:
-               name: ingress-nginx-controller
-               port: 
-                 number: 80
+               serviceName: ingress-nginx-controller
+               servicePort: 80
