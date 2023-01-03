@@ -18,11 +18,13 @@ patchesStrategicMerge:
       annotations:
         eks.amazonaws.com/role-arn: arn:aws:iam::807070170018:role/EKSModerationApiFrankfurt
       name: moderation-api
+      namespace: api
   - |-
     apiVersion: apps/v1
     kind: Deployment
     metadata:
       name: moderation-api
+      namespace: api
     spec:
       template:
         spec:
