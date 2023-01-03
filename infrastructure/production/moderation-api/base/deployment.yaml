@@ -31,10 +31,16 @@ spec:
           image: 807070170018.dkr.ecr.eu-central-1.amazonaws.com/ab3moderator
           imagePullPolicy: Always
           env:
-            - name: DD_AGENT_HOST
-              valueFrom:
-                fieldRef:
-                  fieldPath: status.hostIP
+            - name: CORS_ALLOWED_LIST
+              value: "http://localhost:3000,http://localhost:3000,https://harness.castl.ink"
+            - name: AWS_IMAGES_S3_BUCKET
+              value: "ab3images"
+            - name: FLOW_DEFINITION_ARN
+              value: "arn:aws:sagemaker:eu-central-1:807070170018:flow-definition/abmoderator"
+            - name: RECORDING_CONFIGURATION_ARN
+              value: "arn:aws:ivs:eu-central-1:807070170018:recording-configuration/mMoTPicPPHo2"
+            - name: IVS_CHANNEL_ARN
+              value: "arn:aws:ivs:eu-central-1:807070170018:channel"
           ports:
             - containerPort: 5000
           resources:
