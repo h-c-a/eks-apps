@@ -43,7 +43,7 @@ spec:
             - name: IVS_CHANNEL_ARN
               value: "arn:aws:ivs:eu-central-1:807070170018:channel"
             - name: REDIS_URL
-              value: "signalr-001.zjqsrq.0001.euc1.cache.amazonaws.com:6379"
+              value: "signalr.zjqsrq.ng.0001.euc1.cache.amazonaws.com:6379"
           ports:
             - containerPort: 5000
           resources:
