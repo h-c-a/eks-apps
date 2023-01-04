@@ -6,7 +6,7 @@ resources:
   - imagepolicy.yaml
 images:
   - name: 807070170018.dkr.ecr.us-east-1.amazonaws.com/moderation-api
-    newTag: 1.0.2-production.build.102 
+    newTag: 1.0.3-production.build.103 
 replicas:
   - name: moderation-api
     count: 5
