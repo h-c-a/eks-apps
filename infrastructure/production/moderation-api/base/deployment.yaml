@@ -42,7 +42,7 @@ spec:
               value: "arn:aws:ivs:eu-central-1:807070170018:recording-configuration/mMoTPicPPHo2"
             - name: IVS_CHANNEL_ARN
               value: "arn:aws:ivs:eu-central-1:807070170018:channel"
-            - name: IVS_CHANNEL_ARN
+            - name: REDIS_URL
               value: "signalr-001.zjqsrq.0001.euc1.cache.amazonaws.com:6379"
           ports:
             - containerPort: 5000
