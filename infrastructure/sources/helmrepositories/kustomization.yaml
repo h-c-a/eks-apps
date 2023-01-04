@@ -5,3 +5,4 @@ resources:
   - prometheus.yaml
   - weaveworks.yaml
   - kubecost.yaml
+  - nginx.yaml
