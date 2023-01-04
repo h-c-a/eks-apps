@@ -29,7 +29,7 @@ spec:
                 topologyKey: "topology.kubernetes.io/zone"
       containers:
         - name: moderation-api
-          image: 807070170018.dkr.ecr.eu-central-1.amazonaws.com/ab3moderator:1.0.3-production.build.103
+          image: 807070170018.dkr.ecr.eu-central-1.amazonaws.com/ab3moderator:1.0.4-production.build.104
           imagePullPolicy: Always
           env:
             - name: CORS_ALLOWED_LIST
@@ -42,6 +42,8 @@ spec:
               value: "arn:aws:ivs:eu-central-1:807070170018:recording-configuration/mMoTPicPPHo2"
             - name: IVS_CHANNEL_ARN
               value: "arn:aws:ivs:eu-central-1:807070170018:channel"
+            - name: IVS_CHANNEL_ARN
+              value: "signalr-001.zjqsrq.0001.euc1.cache.amazonaws.com:6379"
           ports:
             - containerPort: 5000
           resources:
