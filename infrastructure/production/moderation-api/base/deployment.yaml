@@ -29,7 +29,7 @@ spec:
                 topologyKey: "topology.kubernetes.io/zone"
       containers:
         - name: moderation-api
-          image: 807070170018.dkr.ecr.eu-central-1.amazonaws.com/ab3moderator:1.0.4-production.build.104
+          image: 807070170018.dkr.ecr.eu-central-1.amazonaws.com/ab3moderator:1.0.5-production.build.105
           imagePullPolicy: Always
           env:
             - name: CORS_ALLOWED_LIST
