@@ -2,7 +2,6 @@ apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
   name: moderation-api
-  namespace: api
 spec:
   minAvailable: 2
   selector:
