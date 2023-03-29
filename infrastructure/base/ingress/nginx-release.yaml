@@ -12,7 +12,7 @@ spec:
         kind: HelmRepository
         name: nginx
         namespace: flux-system
-      version: "4.2.5"
+      version: "4.6.0"
   interval: 1h0m0s
   install:
     remediation:
